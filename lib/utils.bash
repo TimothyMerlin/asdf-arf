@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for arf.
-GH_REPO="https://github.com/TimothyMerlin/asdf-arf"
+GH_REPO="https://github.com/eitsupi/arf"
 TOOL_NAME="arf"
 TOOL_TEST="arf --help"
 
@@ -31,9 +30,41 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if arf has other means of determining installable versions.
 	list_github_tags
+}
+
+get_arch() {
+	local arch
+	arch="$(uname -m)"
+
+	case "$arch" in
+	x86_64 | amd64) echo "x86_64" ;;
+	arm64 | aarch64) echo "aarch64" ;;
+	*)
+		fail "Unsupported architecture: $arch"
+		;;
+	esac
+}
+
+get_platform() {
+	local os arch
+	os="$(uname -s)"
+	arch="$(get_arch)"
+
+	case "$os" in
+	Darwin) echo "${arch}-apple-darwin" ;;
+	Linux) echo "${arch}-unknown-linux-gnu" ;;
+	*)
+		fail "Unsupported operating system: $os"
+		;;
+	esac
+}
+
+get_release_filename() {
+	local platform
+	platform="$(get_platform)"
+
+	echo "arf-console-${platform}.tar.xz"
 }
 
 download_release() {
@@ -41,8 +72,7 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for arf
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/releases/download/v${version}/$(get_release_filename "$version")"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -61,7 +91,6 @@ install_version() {
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-		# TODO: Assert arf executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."

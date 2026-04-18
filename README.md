@@ -2,7 +2,7 @@
 
 # asdf-arf [![Build](https://github.com/TimothyMerlin/asdf-arf/actions/workflows/build.yml/badge.svg)](https://github.com/TimothyMerlin/asdf-arf/actions/workflows/build.yml) [![Lint](https://github.com/TimothyMerlin/asdf-arf/actions/workflows/lint.yml/badge.svg)](https://github.com/TimothyMerlin/asdf-arf/actions/workflows/lint.yml)
 
-[arf](https://github.com/TimothyMerlin/asdf-arf) plugin for the [asdf version manager](https://asdf-vm.com).
+[arf](https://github.com/eitsupi/arf) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
@@ -15,10 +15,8 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
-- `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
+- `bash`, `curl`, `tar`, and standard POSIX utilities.
+- Supported release targets are macOS and Linux on `x86_64` or `aarch64`.
 
 # Install
 
